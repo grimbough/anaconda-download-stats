@@ -2,6 +2,17 @@ library(dplyr)
 library(lubridate)
 library(arrow)
 library(stringr)
+library(readr)
+library(magrittr)
+
+bioc_tables <- c("http://bioconductor.org/packages/stats/bioc/bioc_pkg_stats.tab",
+                 "http://bioconductor.org/packages/stats/data-annotation/annotation_pkg_stats.tab",
+                 "http://bioconductor.org/packages/stats/data-experiment/experiment_pkg_stats.tab",
+                 "http://bioconductor.org/packages/stats/workflows/workflows_pkg_stats.tab")
+bioc_avail <- lapply(bioc_tables, readr::read_tsv, col_types = "ccccc") %>%
+    bind_rows() %>%
+    extract2('Package') %>% 
+    unique()
 
 downloads_per_month <- function(input) {
     
@@ -32,7 +43,6 @@ downloads_per_month <- function(input) {
             download.file(url = url, destfile = tf, quiet = TRUE)
             
             count_table <- read_parquet(tf) %>% 
-                #filter(grepl(pkg_name, pattern = "^bioconductor")) %>% 
                 mutate(counts = as.numeric(counts)) %>%
                 group_by(pkg_name) %>% 
                 summarise(total_count = sum(counts)) 
@@ -47,14 +57,14 @@ downloads_per_month <- function(input) {
         group_by(pkg_name) %>%
         summarise(count = sum(total_count))
     
-    bioc_avail <- BiocManager::available()
     bioc_pkg <- all_pkgs %>%
         filter(grepl(pkg_name, pattern = "^bioconductor")) %>%
         mutate(pkg_name = stringr::str_remove(pkg_name, "bioconductor-")) %>%
-        mutate(pkg_name = bioc_avail[match(pkg_name, tolower(bioc_avail))])
+        mutate(pkg_name = bioc_avail[match(pkg_name, tolower(bioc_avail))]) %>%
+        filter(!is.na( pkg_name ))
     
-    saveRDS(all_pkgs, file = paste0('anaconda_counts/', substr(month_start, 1,7), "_all.rds" ))
-    saveRDS(bioc_pkg, file = paste0('anaconda_counts/', substr(month_start, 1,7), "_bioc.rds" ))
+    saveRDS(all_pkgs, file = paste0('rdata/monthly/', substr(month_start, 1,7), "_all.rds" ))
+    saveRDS(bioc_pkg, file = paste0('rdata/monthly/', substr(month_start, 1,7), "_bioc.rds" ))
     
     return(all_pkgs)
 }
