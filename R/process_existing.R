@@ -1,8 +1,9 @@
-source("download_functions.R")
+source("R/download_functions.R")
 
 for(year in c("2017", "2018", "2019")) {
     for(month in stringr::str_pad(1:12, 2, pad = "0")) {
-        input <- paste(year, month, sep = "-")
+        input <- paste(year, month, "01", sep = "-")
+        if(ymd(input) < lubridate::today() %m-% months(1))
         downloads_per_month(input)
     }
 }
@@ -14,6 +15,6 @@ readr::write_rds(bioc_counts, path = "rdata/bioc_counts.rds", compress = "gz")
 
 
 all_files <- list.files(pattern = "all", path = "rdata/monthly", full.names = TRUE)
-bioc_counts <- compileCompleteTable(monthly_files = bioc_files)
+all_counts <- compileCompleteTable(monthly_files = all_files)
 readr::write_tsv(all_counts, path = "tsv/all_counts.tsv")
 readr::write_rds(all_counts, path = "rdata/all_counts.rds", compress = "gz")

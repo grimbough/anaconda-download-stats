@@ -18,10 +18,10 @@ bioc_avail <- lapply(bioc_tables, readr::read_tsv, col_types = "ccccc") %>%
 
 ## downloads & processed all available parquet files for a given month
 ## arguments:
-## input: string of the format YEAR-MONTH e.g. "2019-06"
+## input: string of the format YEAR-MONTH-DAY e.g. "2019-06-01"
 downloads_per_month <- function(input) {
     
-    month_start <- ymd(paste0(input, "-01"))
+    month_start <- ymd(input)
     
     n_days <- lubridate::days_in_month(month_start)
     
@@ -56,12 +56,13 @@ downloads_per_month <- function(input) {
             return(NULL)
         }
         
-    }, mc.cores = 10)
+    }, mc.cores = 4)
     
     all_pkgs <- bind_rows(res) %>%
         group_by(pkg_name) %>%
-        summarise(count = sum(total_count))
+        summarise(counts = sum(total_count))
     
+    ## filter only bioconductor packages and format names correctly
     bioc_pkg <- all_pkgs %>%
         filter(grepl(pkg_name, pattern = "^bioconductor")) %>%
         mutate(pkg_name = stringr::str_remove(pkg_name, "bioconductor-")) %>%
@@ -79,7 +80,7 @@ compileCompleteTable <- function(monthly_files) {
         counts <- readRDS(x) %>%
             mutate(year = substr(basename(x), 1, 4),
                    month = month.abb[as.integer(substr(basename(x), 6, 7))]) %>%
-            dplyr::select(pkg_name, year, month, count)
+            dplyr::select(pkg_name, year, month, counts)
     }) %>%
         dplyr::bind_rows() %>%
         arrange(pkg_name) 

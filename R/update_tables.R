@@ -1,4 +1,4 @@
-source("download_functions.R")
+source("R/download_functions.R")
 
 ## load the existing table of counts - bioc is sufficient
 bioc_counts <- readRDS(file = "rdata/bioc_counts.rds")
@@ -22,7 +22,8 @@ while(next_month < floor_date(today(), unit = "month")) {
 #####################################
 
 bioc_files <- list.files(pattern = "bioc", path = "rdata/monthly/", full.names = TRUE)
-bioc_counts <- compileCompleteTable(monthly_files = bioc_files)
+bioc_counts <- compileCompleteTable(monthly_files = bioc_files) %>%
+    rename(Package = pkg_name, Year = year, Month = month, Nb_of_downloads = count)
 readr::write_tsv(bioc_counts, path = "tsv/bioc_counts.tsv")
 readr::write_rds(bioc_counts, path = "rdata/bioc_counts.rds", compress = "gz")
 
