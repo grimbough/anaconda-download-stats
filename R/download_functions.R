@@ -5,6 +5,8 @@ library(stringr)
 library(readr)
 library(magrittr)
 
+## download tables for all recorded Bioconductor packages
+## we use this to match the all lower case conda names with Bioconductor pacakages
 bioc_tables <- c("http://bioconductor.org/packages/stats/bioc/bioc_pkg_stats.tab",
                  "http://bioconductor.org/packages/stats/data-annotation/annotation_pkg_stats.tab",
                  "http://bioconductor.org/packages/stats/data-experiment/experiment_pkg_stats.tab",
@@ -14,9 +16,12 @@ bioc_avail <- lapply(bioc_tables, readr::read_tsv, col_types = "ccccc") %>%
     extract2('Package') %>% 
     unique()
 
+## downloads & processed all available parquet files for a given month
+## arguments:
+## input: string of the format YEAR-MONTH e.g. "2019-06"
 downloads_per_month <- function(input) {
     
-    month_start <- ymd(input)
+    month_start <- ymd(paste0(input, "-01"))
     
     n_days <- lubridate::days_in_month(month_start)
     
@@ -67,5 +72,17 @@ downloads_per_month <- function(input) {
     saveRDS(bioc_pkg, file = paste0('rdata/monthly/', substr(month_start, 1,7), "_bioc.rds" ))
     
     return(all_pkgs)
+}
+
+compileCompleteTable <- function(monthly_files) {
+    all_counts <- lapply(monthly_files, function(x) {
+        counts <- readRDS(x) %>%
+            mutate(year = substr(basename(x), 1, 4),
+                   month = month.abb[as.integer(substr(basename(x), 6, 7))]) %>%
+            dplyr::select(pkg_name, year, month, count)
+    }) %>%
+        dplyr::bind_rows() %>%
+        arrange(pkg_name) 
+    return(all_counts)
 }
 
