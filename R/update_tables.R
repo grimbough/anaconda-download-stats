@@ -23,7 +23,7 @@ while(next_month < floor_date(today(), unit = "month")) {
 
 bioc_files <- list.files(pattern = "bioc", path = "rdata/monthly/", full.names = TRUE)
 bioc_counts <- compileCompleteTable(monthly_files = bioc_files) %>%
-    rename(Package = pkg_name, Year = year, Month = month, Nb_of_downloads = count)
+    rename(Package = pkg_name, Year = year, Month = month, Nb_of_downloads = counts)
 readr::write_tsv(bioc_counts, path = "tsv/bioc_counts.tsv")
 readr::write_rds(bioc_counts, path = "rdata/bioc_counts.rds", compress = "gz")
 
