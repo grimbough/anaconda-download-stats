@@ -5,16 +5,16 @@ bioc_counts <- readRDS(file = "rdata/bioc_counts.rds")
 
 ## find the most recent month we have records for
 max_month <- bioc_counts %>% 
-    mutate(date = ymd(paste0(year, month, "01"))) %>%
-    summarise(month = max(date)) %>%
-    magrittr::extract2('month')
+    mutate(date = ymd(paste0(Year, Month, "01"))) %>%
+    summarise(Month = max(date)) %>%
+    magrittr::extract2('Month')
     
 ## for any months between then and now try and download data
 next_month <- ymd(max_month) %m+% months(1)
 while(next_month < floor_date(today(), unit = "month")) {
-    message(last_month) 
-    downloads_per_month(last_month)
-    last_month <- last_month %m+% months(1)
+    message(next_month) 
+    downloads_per_month(next_month)
+    next_month <- next_month %m+% months(1)
 }
 
 #####################################
