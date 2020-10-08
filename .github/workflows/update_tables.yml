@@ -28,3 +28,10 @@ jobs:
     - name: Process new counts
       run: Rscript R/update_tables.R
       
+    - name: commit updated tables
+      run: |
+        git add rdata/all_counts.rds rdata/bioc_counts.rds 
+        git add tsv/all_counts.tsv tsv/bioc_counts.tsv
+        git commit -m "`date +%B` update" || echo "No changes to commit"
+        git push origin master || echo "No changes to commit"
+      
