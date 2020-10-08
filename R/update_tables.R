@@ -1,5 +1,9 @@
 source("R/download_functions.R")
 
+if(!dir.exists("rdata/monthly")) {
+    dir.create("rdata/monthly")
+}
+
 next_month <- ymd('2017-01-01') 
 while(next_month < floor_date(today(), unit = "month")) {
     message(next_month) 

@@ -9,7 +9,7 @@ on:
 name: update-count-tables
 
 jobs:
-  book-builder-devel:
+  update-count-tables:
     runs-on: ubuntu-latest
     container:
       image: grimbough/conda-stats
