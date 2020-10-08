@@ -1,6 +1,6 @@
 source("R/download_functions.R")
 
-for(year in c("2017", "2018", "2019")) {
+for(year in as.character(seq(2017, year(today())))) {
     for(month in stringr::str_pad(1:12, 2, pad = "0")) {
         input <- paste(year, month, "01", sep = "-")
         if(ymd(input) < lubridate::today() %m-% months(1))

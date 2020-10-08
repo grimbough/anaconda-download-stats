@@ -23,6 +23,12 @@ downloads_per_month <- function(input) {
     
     month_start <- ymd(input)
     
+    output_file <- paste0('rdata/monthly/', substr(month_start, 1,7), "_all.rds" )
+    if(file.exists(output_file)) {
+        message('File exists')
+        return( NULL )
+    }
+    
     n_days <- lubridate::days_in_month(month_start)
     
     month <- month_start %>%
@@ -32,8 +38,7 @@ downloads_per_month <- function(input) {
     year <- year(month_start) %>%
         as.character()
     
-    res <- parallel::mclapply(seq_len(n_days), FUN = function(day) {  
-        message(day)
+    res <- lapply(seq_len(n_days), FUN = function(day) {  
         
         url <- paste0("https://anaconda-package-data.s3.amazonaws.com/conda/hourly/", 
                       year, "/", month, "/", 
@@ -56,7 +61,7 @@ downloads_per_month <- function(input) {
             return(NULL)
         }
         
-    }, mc.cores = 4)
+    })
     
     all_pkgs <- bind_rows(res) %>%
         group_by(pkg_name) %>%
@@ -69,7 +74,7 @@ downloads_per_month <- function(input) {
         mutate(pkg_name = bioc_avail[match(pkg_name, tolower(bioc_avail))]) %>%
         filter(!is.na( pkg_name ))
     
-    saveRDS(all_pkgs, file = paste0('rdata/monthly/', substr(month_start, 1,7), "_all.rds" ))
+    saveRDS(all_pkgs, file = output_file)
     saveRDS(bioc_pkg, file = paste0('rdata/monthly/', substr(month_start, 1,7), "_bioc.rds" ))
     
     return(all_pkgs)

@@ -1,0 +1,30 @@
+on:
+  push:
+    branches:
+      - master
+  schedule:
+  # should run at midnight 20th day of each month
+    - cron:  '0 0 20 * *'
+
+name: update-count-tables
+
+jobs:
+  book-builder-devel:
+    runs-on: ubuntu-latest
+    container:
+      image: grimbough/conda-stats
+    steps:
+    
+    - uses: actions/checkout@v2
+    
+    - name: Cache processed monthly tables
+      uses: actions/cache@v2
+      env:
+        cache-name: monthly-tables
+      with:
+        path: rdata/monthly
+        key: ${{ runner.os }}-${{ env.cache-name }}
+        
+    - name: Process new counts
+      run: Rscript R/update_tables.R
+      
