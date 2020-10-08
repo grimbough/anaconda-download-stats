@@ -47,9 +47,8 @@ bioc_counts %>% filter(Package == "DESeq2")
 Scripts for producing the count tables can be found in the *R* folder:
 
 - `download_functions.R`: Contains functions to download and process the parquet files containing the package download counts.
-- `process_existing.R`: Initial script used to process all existing data.  *Should not need to be run again.*
-- `update_tables.R`: Identifies the last month for which we have processed statistics, and tries to find any additional data uploaded between then and now.  *Intended to be run on a monthly basis via cron*.
+- `update_tables.R`: For all months from January 2017 to today, downloads and collates the daily count data into the complete tables.  *Intended to be run on a monthly basis via cron*.
 
-## Singularity image
+## Singularity and Docker image
 
-The **singularity** folder provides a Singularity definition file to create a Singularity image containing R and the Tidyverse packages alongside an installation of Apache Arrow and the apache-arrow R package.  The apache-arrow package provides functionality for reading parquet files, and this image is used as the base for reading the download files.
+The **singularity** and **docker** folders provide the definition files to create a container image that includes R and the Tidyverse packages alongside an installation of Apache Arrow and the apache-arrow R package.  The apache-arrow package provides functionality for reading parquet files, and this image is used as the base for reading the download files.
