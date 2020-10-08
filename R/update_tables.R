@@ -15,13 +15,14 @@ while(next_month < floor_date(today(), unit = "month")) {
 ## re-write the complete tables
 #####################################
 
+message("Writing bioc tables")
 bioc_files <- list.files(pattern = "bioc", path = "rdata/monthly/", full.names = TRUE)
 bioc_counts <- compileCompleteTable(monthly_files = bioc_files) %>%
     rename(Package = pkg_name, Year = year, Month = month, Nb_of_downloads = counts)
 readr::write_tsv(bioc_counts, path = "tsv/bioc_counts.tsv")
 readr::write_rds(bioc_counts, path = "rdata/bioc_counts.rds", compress = "gz")
 
-
+message("Writing complete tables")
 all_files <- list.files(pattern = "all", path = "rdata/monthly", full.names = TRUE)
 all_counts <- compileCompleteTable(monthly_files = all_files)
 readr::write_tsv(all_counts, path = "tsv/all_counts.tsv")

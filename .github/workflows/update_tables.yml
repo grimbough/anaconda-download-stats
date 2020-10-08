@@ -30,6 +30,8 @@ jobs:
       
     - name: commit updated tables
       run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
         git add rdata/all_counts.rds rdata/bioc_counts.rds 
         git add tsv/all_counts.tsv tsv/bioc_counts.tsv
         git commit -m "`date +%B` update" || echo "No changes to commit"
