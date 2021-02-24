@@ -1,2 +1,5 @@
 .tsv.gz filter=lfs diff=lfs merge=lfs -text
 tsv/*.tsv.gz filter=lfs diff=lfs merge=lfs -text
+rdata/all_counts.rds filter=lfs diff=lfs merge=lfs -text
+rdata/bioc_counts.rds filter=lfs diff=lfs merge=lfs -text
+rdata/*.rds filter=lfs diff=lfs merge=lfs -text
