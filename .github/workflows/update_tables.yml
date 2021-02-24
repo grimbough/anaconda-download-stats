@@ -42,7 +42,7 @@ jobs:
       
     - name: Compress TSV files
       run: |
-        gzip tsv/*.tsv
+        gzip -f tsv/*.tsv
       
     - name: commit updated tables
       run: |
