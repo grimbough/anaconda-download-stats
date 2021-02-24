@@ -15,7 +15,7 @@ jobs:
       image: grimbough/conda-stats
     steps:
     
-    - name: install git lfs 
+    - name: Install git lfs 
       run: | 
         sudo apt-get -y update
         sudo apt-get -y install git-lfs
@@ -44,7 +44,7 @@ jobs:
       run: |
         gzip -f -n tsv/*.tsv
       
-    - name: commit updated tables
+    - name: Commit updated tables
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
