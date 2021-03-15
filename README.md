@@ -40,14 +40,32 @@ bioc_counts %>% filter(Package == "DESeq2")
  3 DESeq2  2017  May               765
  4 DESeq2  2017  Jun               876
  # … with 25 more rows
- ```
+```
+
+#### Access via `BiocPkgTools`
+
+Access to the Bioconductor count table is also provided via the `anacondaDownloadStats()` function in [**BiocPkgTools**](http://bioconductor.org/packages/BiocPkgTools/).  You will need version 1.9.2 or greater of the package to have access to the function.  The table of counts is formatted by the function to be consistent with other data retrieval functions within the package.
+
+```r
+BiocPkgTools::anacondaDownloadStats() %>% filter(Year == 2019, Month == "Jan")
+
+# A tibble: 1,342 x 7
+   Package       Year  Month Nb_of_distinct_IPs Nb_of_downloads repo     Date      
+   <chr>         <chr> <chr>              <int>           <dbl> <chr>    <date>    
+ 1 a4            2019  Jan                   NA               1 Anaconda 2019-01-01
+ 2 a4Base        2019  Jan                   NA             147 Anaconda 2019-01-01
+ 3 a4Classif     2019  Jan                   NA               3 Anaconda 2019-01-01
+ 4 a4Core        2019  Jan                   NA             226 Anaconda 2019-01-01
+ 5 a4Preproc     2019  Jan                   NA             220 Anaconda 2019-01-01
+# … with 1,337 more rows
+```
 
 ## R code
 
 Scripts for producing the count tables can be found in the *R* folder:
 
 - `download_functions.R`: Contains functions to download and process the parquet files containing the package download counts.
-- `update_tables.R`: For all months from January 2017 to today, downloads and collates the daily count data into the complete tables.  *Intended to be run on a monthly basis via cron*.
+- `update_tables.R`: For all months from January 2017 to today, downloads and collates the daily count data into the complete tables.  *Intended to be run on a monthly basis via GitHub actions*.
 
 ## Singularity and Docker image
 
