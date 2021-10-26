@@ -12,8 +12,10 @@ name: update-count-tables
 jobs:
   update-count-tables:
     runs-on: ubuntu-20.04
+    
     container:
-      image: grimbough/conda-stats
+      image: grimbough/conda-stats:4.1
+      
     steps:
     
     - name: Checkout github repo (+ download lfs dependencies)
@@ -37,7 +39,7 @@ jobs:
       
     - name: Compress TSV files
       run: |
-        gzip -f -n tsv/*.tsv
+        gzip --fast -f -n tsv/*.tsv
       
     - name: Commit updated tables
       run: |
