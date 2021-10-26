@@ -1,4 +1,5 @@
 on:
+  workflow_dispatch
   push:
     branches:
       - master
@@ -14,12 +15,6 @@ jobs:
     container:
       image: grimbough/conda-stats
     steps:
-    
-    - name: Install git lfs 
-      run: | 
-        sudo apt-get -y update
-        sudo apt-get -y install git-lfs
-        git lfs install
     
     - name: Checkout github repo (+ download lfs dependencies)
       uses: actions/checkout@v2
