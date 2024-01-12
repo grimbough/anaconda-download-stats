@@ -4,7 +4,10 @@ if(!dir.exists("rdata/monthly")) {
     dir.create("rdata/monthly")
 }
 
-next_month <- ymd('2017-01-01') 
+current_all <- readr::read_rds("rdata/all_counts.rds")
+
+last_month <- recreateMonthlyTables(complete_table = current_all)
+next_month <- ymd(last_month) %m+% months(1)
 while(next_month < floor_date(today(), unit = "month")) {
     message(next_month) 
     downloads_per_month(next_month)
