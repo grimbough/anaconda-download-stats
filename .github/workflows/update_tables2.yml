@@ -1,22 +1,25 @@
 on:
-  # push:
-  #   branches:
-  #     - master
-  # schedule:
-  # # should run at midnight 20th day of each month
-  #   - cron:  '0 0 20 * *'
+  push:
+    branches:
+      - master
+  schedule:
+  # should run at midnight 20th day of each month
+    - cron:  '0 0 20 * *'
   workflow_dispatch:
 
-name: update-count-tables
+name: update-count-tables-2
 
 jobs:
   update-count-tables:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     
     container:
-      image: grimbough/conda-stats:4.1
+      image: rocker/tidyverse:4.3
       
     steps:
+    
+    - name: Install git lfs
+      run: apt-get -y update && apt-get -y install git-lfs
     
     - name: Checkout github repo (+ download lfs dependencies)
       uses: actions/checkout@v2
@@ -27,12 +30,7 @@ jobs:
       run: git lfs checkout
     
     - name: Cache processed monthly tables
-      uses: actions/cache@v2
-      env:
-        cache-name: monthly-tables
-      with:
-        path: rdata/monthly
-        key: ${{ runner.os }}-${{ env.cache-name }}
+      run: Rscript -e 'install.packages("arrow")'
         
     - name: Process new counts
       run: Rscript R/update_tables.R
