@@ -47,7 +47,6 @@ jobs:
       
     - name: Commit updated tables
       run: |
-        echo ${GITHUB_WORKSPACE}
         pwd
         ls -lha
         git config user.email "action@github.com"
@@ -56,5 +55,4 @@ jobs:
         git add tsv/all_counts.tsv.gz tsv/bioc_counts.tsv.gz
         git commit -m "`date +%B` update" || echo "No changes to commit"
         git push origin master || echo "No changes to commit"
-      working-directory: ${GITHUB_WORKSPACE}
       shell: bash
