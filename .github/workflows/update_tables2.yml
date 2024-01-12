@@ -26,9 +26,15 @@ jobs:
       with:
         lfs: true
         
-    # - name: Checkout LFS objects
-    #   run: git lfs checkout
-    
+    - name: Commit updated tables
+      run: |
+        echo ${GITHUB_WORKSPACE}
+        pwd
+        ls -lha
+        git status
+      working-directory: ${GITHUB_WORKSPACE}
+      shell: bash
+        
     - name: Cache processed monthly tables
       run: Rscript -e 'install.packages("arrow")'
         
@@ -41,6 +47,7 @@ jobs:
       
     - name: Commit updated tables
       run: |
+        echo ${GITHUB_WORKSPACE}
         pwd
         ls -lha
         git config user.email "action@github.com"
@@ -49,4 +56,5 @@ jobs:
         git add tsv/all_counts.tsv.gz tsv/bioc_counts.tsv.gz
         git commit -m "`date +%B` update" || echo "No changes to commit"
         git push origin master || echo "No changes to commit"
-      
+      working-directory: ${GITHUB_WORKSPACE}
+      shell: bash
