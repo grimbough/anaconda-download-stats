@@ -67,6 +67,3 @@ Scripts for producing the count tables can be found in the *R* folder:
 - `download_functions.R`: Contains functions to download and process the parquet files containing the package download counts.
 - `update_tables.R`: For all months from January 2017 to today, downloads and collates the daily count data into the complete tables.  *Intended to be run on a monthly basis via GitHub actions*.
 
-## Singularity and Docker image
-
-The **singularity** and **docker** folders provide the definition files to create a container image that includes R and the Tidyverse packages alongside an installation of Apache Arrow and the apache-arrow R package.  The apache-arrow package provides functionality for reading parquet files, and the docker image is used by the Github Workflow that generates the final tables.
