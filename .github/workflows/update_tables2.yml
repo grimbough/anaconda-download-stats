@@ -32,7 +32,6 @@ jobs:
         pwd
         ls -lha
         git status
-      working-directory: ${GITHUB_WORKSPACE}
       shell: bash
         
     - name: Cache processed monthly tables
