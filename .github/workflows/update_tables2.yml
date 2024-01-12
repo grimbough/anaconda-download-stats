@@ -42,8 +42,7 @@ jobs:
     - name: Commit updated tables
       run: |
         pwd
-        ls -l
-        cd anaconda-download-stats
+        ls -lha
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add rdata/all_counts.rds rdata/bioc_counts.rds 
