@@ -43,8 +43,8 @@ jobs:
       run: |
         pwd
         ls -lha
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
+        git config user.email "action@github.com"
+        git config user.name "GitHub Action"
         git add rdata/all_counts.rds rdata/bioc_counts.rds 
         git add tsv/all_counts.tsv.gz tsv/bioc_counts.tsv.gz
         git commit -m "`date +%B` update" || echo "No changes to commit"
