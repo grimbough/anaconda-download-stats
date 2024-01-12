@@ -85,7 +85,7 @@ recreateMonthlyTables <- function(complete_table) {
     idx <- paste(complete_table$year, complete_table$month, sep = "-") |>
         lubridate::ym() |>
         as.character()
-    
+
     months_list <- split(complete_table, idx)
     names(months_list) <- sub(x = names(months_list), pattern = "-01$", replacement = "")
     
